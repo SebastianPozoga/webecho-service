@@ -1,0 +1,18 @@
+<html>
+<head>
+    <script src="lib/socket.io-client/socket.io.js"></script>
+    <script src="lib/angular/angular.min.js"></script>
+    <title>Log rfid</title>
+</head>
+<body ng-app="app">
+<h1>RFID list</h1>
+
+<ul ng-controller="RfidController">
+    <li ng-repeat="item in list track by $index">
+        {{item.port}} := {{item.value}} ( {{item.date | date:"MM/dd/yyyy 'at' HH:mm:ss Z"}} )
+    </li>
+</ul>
+
+<script src="app.js"></script>
+</body>
+</html>

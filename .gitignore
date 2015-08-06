@@ -1,0 +1,4 @@
+.idea
+debug/lib
+node_modules
+*~

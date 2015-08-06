@@ -1,0 +1,18 @@
+{
+  "port": 8191,
+  "tokens": [
+    {
+      "token": "SADF$CV#$@C##@C##$CRGV$V%$BBBDFS",
+      "role": [
+        "write",
+        "read"
+      ]
+    },
+    {
+      "token": "*",
+      "role": [
+        "read"
+      ]
+    }
+  ]
+}
