@@ -38,7 +38,7 @@ angular.module('app', [])
         var api = {};
 
         api.start = function (token) {
-            api.io = io('http://localhost:8191', {
+            api.io = io({
                 query: 'token=' + token
             });
             return api.io;
