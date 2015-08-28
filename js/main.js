@@ -1,6 +1,8 @@
 module.exports = function (config) {
-    var app = require('express').createServer(),
-        io = require('socket.io')(app),
+    var app = require('express')(),
+        server = require('http').Server(app),
+        io = require('socket.io')(server),
+
         logger = require("./modules/logger"),
         auth = require("./modules/auth")(config, logger, app, io),
         socket = require("./modules/socket")(config, logger, app, io, auth),
@@ -10,5 +12,6 @@ module.exports = function (config) {
         webDebug = require("./modules/webdebug")(config, logger, app, io);
     }
 
+    server.listen(config.port);
     logger.log("echo server started", [config]);
 };

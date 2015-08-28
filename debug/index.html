@@ -2,16 +2,29 @@
 <head>
     <script src="lib/socket.io-client/socket.io.js"></script>
     <script src="lib/angular/angular.min.js"></script>
-    <title>Log rfid</title>
+    <title>Log webecho</title>
 </head>
-<body ng-app="app">
-<h1>RFID list</h1>
+<body ng-app="app" ng-controller="WebechoController as ctrl">
+<h1>Webecho - service</h1>
 
-<ul ng-controller="RfidController">
-    <li ng-repeat="item in list track by $index">
-        {{item.port}} := {{item.value}} ( {{item.date | date:"MM/dd/yyyy 'at' HH:mm:ss Z"}} )
+<ul>
+    <li ng-repeat="item in ctrl.list track by $index">
+        {{item.date | date:"MM/dd/yyyy 'at' HH:mm:ss Z"}} : {{item.data| json}}
     </li>
 </ul>
+
+<div ng-show="!ctrl.started">
+    <h2>Connect</h2>
+    <input ng-model="ctrl.token"/> <br/>
+    <input type="submit" ng-click="ctrl.start()"/>
+</div>
+
+<div ng-show="ctrl.started">
+    <h2>Write</h2>
+    <input ng-model="ctrl.msg"/> <br/>
+    <input type="submit" ng-click="ctrl.write()"/>
+</div>
+
 
 <script src="app.js"></script>
 </body>
