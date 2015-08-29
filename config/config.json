@@ -3,14 +3,14 @@
   "tokens": [
     {
       "token": "7574DI3HzLX2EekxgZ2my3fLb77690z4",
-      "role": [
+      "roles": [
         "write",
         "read"
       ]
     },
     {
       "token": "*",
-      "role": [
+      "roles": [
         "read"
       ]
     }

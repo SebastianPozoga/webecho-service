@@ -3,17 +3,55 @@ angular.module('app', [])
         var that = this;
         that.started = false;
 
+        that.filters = {
+            actions: [],
+            ids: []
+        };
+
+        that.addIdsFilter = function () {
+            that.filters.ids.push(that.newIdsFilter);
+            that.updateFilters();
+            that.newIdsFilter = "";
+        };
+
+        that.removeIdsFilter = function (item) {
+            that.filters.ids = that.filters.ids.filter(function (val) {
+                return val != item;
+            });
+            that.updateFilters();
+        };
+
+        that.addActionFilter = function () {
+            that.filters.actions.push(that.newActionFilter);
+            that.updateFilters();
+            that.newActionFilter = "";
+        };
+
+        that.removeActionFilter = function (item) {
+            that.filters.actions = that.filters.actions.filter(function (val) {
+                return val != item;
+            });
+            that.updateFilters();
+        };
+
+        that.updateFilters = function () {
+            that.socket.emit('update_filters', that.filters);
+        };
+
         that.clear = function () {
             that.list = [];
         };
 
         that.start = function () {
-            that.io = io.start(that.token);
+            that.socket = io.start(that.token);
 
-            that.io.on('change', function (data) {
+            that.socket.onAll(function (action, data) {
                 that.list.push({
                     date: new Date(),
-                    data: data
+                    data: {
+                        action: action,
+                        data: data
+                    }
                 });
                 $rootScope.$apply();
             });
@@ -21,9 +59,21 @@ angular.module('app', [])
             that.started = true;
         };
 
-        that.write = function (token) {
-            that.io.emit('echo', {
-                action: 'change',
+        that.echoWithId = function () {
+            that.socket.emit('echo', {
+                action: that.action,
+                data: {
+                    id: that.id,
+                    msg: that.msg
+                }
+            });
+
+            that.msg = "";
+        };
+
+        that.echoWithoutId = function () {
+            that.socket.emit('echo', {
+                action: that.action,
                 data: {
                     msg: that.msg
                 }
@@ -38,10 +88,25 @@ angular.module('app', [])
         var api = {};
 
         api.start = function (token) {
-            api.io = io({
+            var superEmit, socket, onAllFn;
+
+            socket = io({
                 query: 'token=' + token
             });
-            return api.io;
+
+            socket.onAll = function (cb) {
+                onAllFn = cb;
+            };
+
+            superEmit = socket.onevent;
+            socket.onevent = function () {
+                if (onAllFn) {
+                    onAllFn.apply(this, arguments);
+                }
+                superEmit.apply(this, arguments);
+            };
+
+            return socket;
         };
 
         return api;

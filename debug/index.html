@@ -1,7 +1,5 @@
 <html>
 <head>
-    <script src="lib/socket.io-client/socket.io.js"></script>
-    <script src="lib/angular/angular.min.js"></script>
     <title>Log webecho</title>
 </head>
 <body ng-app="app" ng-controller="WebechoController as ctrl">
@@ -21,11 +19,44 @@
 
 <div ng-show="ctrl.started">
     <h2>Write</h2>
-    <input ng-model="ctrl.msg"/> <br/>
-    <input type="submit" ng-click="ctrl.write()"/>
+    Id: <input ng-model="ctrl.id"/> <br/>
+    Msg: <input ng-model="ctrl.msg"/> <br/>
+    Event name: <input ng-model="ctrl.action" value="message"/> <br/>
+    <input type="submit" ng-click="ctrl.echoWithId()" value="emit message"/>
+    <input type="submit" ng-click="ctrl.echoWithoutId()" value="emit debug_event"/>
+</div>
+
+<div ng-show="ctrl.started">
+    <h2>Filters</h2>
+
+    <div>
+        <h3>Actions</h3>
+        <input ng-model="ctrl.newActionFilter"/> <br/>
+        <input type="submit" ng-click="ctrl.addActionFilter()" value="add action filter"/>
+
+        <div class="list">
+            <span ng-repeat="item in ctrl.filters.actions track by $index"
+                  ng-click="ctrl.removeActionFilter(item)"> {{item}} (X)
+            </span>
+        </div>
+    </div>
+
+    <div>
+        <h3>Ids</h3>
+        <input ng-model="ctrl.newIdsFilter"/> <br/>
+        <input type="submit" ng-click="ctrl.addIdsFilter()" value="add ids filter"/>
+
+        <div class="list">
+            <span ng-repeat="item in ctrl.filters.ids track by $index" ng-click="ctrl.removeActionFilter(item)">
+                {{item}} (X)
+            </span>
+        </div>
+    </div>
 </div>
 
 
+<script src="lib/socket.io-client/socket.io.js"></script>
+<script src="lib/angular/angular.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

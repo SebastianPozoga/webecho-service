@@ -2,34 +2,50 @@ module.exports = function (config, logger, app, io) {
     var api = {};
 
     api.auth = function (socket) {
-        console.log("socket.handshake.query", socket.handshake.query);
-        var token = socket.handshake.query.token;
-        for (var i in config.tokens) {
-            if (config.tokens[i].token == token) {
-                socket.auth = config.tokens[i];
-                logger.log("auth", config.tokens[i]);
-                return true;
-            }
-        }
-        return null;
+        var token = socket.handshake.query.token,
+            row = api.getTokenRow(token);
+        if (!row) return false;
+        socket.roles = row.roles;
+        socket.filters = row.filters;
+        logger.log("auth", row);
+        return true;
     };
 
-    api.hasRole = function (socket, role) {
-        for (var i in socket.auth.role) {
-            if (socket.auth.role[i] == role) return true;
+    api.getTokenRow = function (token) {
+        for (var i in config.tokens) {
+            if (config.tokens[i].token == token) {
+                return config.tokens[i];
+            }
+        }
+        logger.error("No find token");
+        return false;
+    };
+
+    api.tokenHasRole = function (token, role) {
+        var row = api.getTokenRow(token);
+        if (!row) return false;
+        for (var i in row.role) {
+            if (row.role[i] == role) return true;
         }
         return false;
     };
 
-    io.use(function (socket, next) {
-        if (api.auth(socket)) {
-            logger.log("Login success");
-            next();
-        } else {
-            logger.error("Authentication error");
-            next(new Error('Authentication error'));
+    api.socketHasRole = function (socket, role) {
+        var roles = socket.roles;
+        if (!roles) return false;
+        for (var i in roles) {
+            if (roles[i] == role) return true;
         }
-    });
+        return false;
+    };
+
+    api.isWriteToken = function (token) {
+        return api.tokenHasRole(token, "write");
+    };
+
+    api.isWriteSocket = function (socket) {
+        return api.socketHasRole(socket, "write");
+    };
 
     logger.log("auth module... started");
     return api;

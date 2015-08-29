@@ -6,6 +6,7 @@ module.exports = function (config) {
         logger = require("./modules/logger"),
         auth = require("./modules/auth")(config, logger, app, io),
         socket = require("./modules/socket")(config, logger, app, io, auth),
+        rest = require("./modules/rest")(config, logger, app, io, auth),
         webDebug;
 
     if (config.webdebug == true) {
