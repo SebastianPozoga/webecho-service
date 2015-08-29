@@ -42,6 +42,16 @@ sudo service webecho start/stop/debug/restart
       "roles": [
         "read"
       ]
+    },
+    {
+      "token": "user_with_filters",
+      "roles": [
+        "read"
+      ],
+      "filters": {
+        "ids": [],
+        "actions": []
+      }
     }
   ]
 }
