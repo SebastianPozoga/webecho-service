@@ -1,7 +1,9 @@
 # webecho-service
 
 It make possible:
- - real time communication with webbrowser and scripts (like php websites etc)
+ - realtime communication webbrowser and servers scripts (like php, node etc)
+ - filter data by actions & ids
+ - make read / write role connections
 
 # Install
 ```
@@ -23,6 +25,35 @@ You can use service like:
 sudo service webecho start/stop/debug/restart
 ```
 
+# Config
+```
+{
+  "port": 8191,
+  "tokens": [
+    {
+      "token": "7574DI3HzLX2EekxgZ2my3fLb77690z4",
+      "roles": [
+        "write",
+        "read"
+      ]
+    },
+    {
+      "token": "*",
+      "roles": [
+        "read"
+      ]
+    }
+  ]
+}
+```
+ - port - echoservice port
+ - tokens - list of tokens use to auth
+ - token -  a secret string use to auth and get connect roles
+ - roles - connection roles (read - can listen, write - can emit)
+
+# Tokens
+Don't use special chars. You can generate token by http://randomkeygen.com (Recomended: CodeIgniter Encryption Keys)
+
 # Standalone
 If you want run the script without install you can use:
 ```
@@ -30,16 +61,45 @@ node webecho.js [optional args]
 ```
 Arguments:
  - **--debug** - to show web debug console (default on 8091 port)
- - **--config=$path** - to change config path
 
-# Usage
-security tokens....
-
-# Usage
+# Simple usage
 You can connect to the service by socket.io (or other socket library). Default port is 8191.
 ```
-io.emit('write', {
-  port: "my_port_name",
-  value: true
+socket = io({
+    query: 'token=' + token
 });
 ```
+
+if you have write role you can:
+```
+socket.emit('echo', {
+  action: "emit_action_name",
+  data: {
+    desc: "action data"
+  }
+});
+```
+
+if you have read role you can:
+```
+socket.on('my_action', function(date){
+  // use data
+});
+```
+
+more on: http://socket.io
+
+# Filters
+You can filter user by actions and ids. To set your socket filter emit filter
+
+```
+function setDefaultFilters(socket) {
+    socket.emit('update_filters', {
+        actions: ['my_action_name'],
+        ids: [1, 2, 3]
+    });
+};
+```
+if actions is null or empty the filter is disable.
+if ids is null or empty the filter is disable.
+Default all filters are disable.
