@@ -113,3 +113,6 @@ function setDefaultFilters(socket) {
 if actions is null or empty the filter is disable.
 if ids is null or empty the filter is disable.
 Default all filters are disable.
+
+# Client libraries
+ - PHP: https://github.com/SebastianPozoga/webecho-php
