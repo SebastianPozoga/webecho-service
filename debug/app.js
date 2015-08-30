@@ -84,7 +84,7 @@ angular.module('app', [])
 
         that.clear();
     }])
-    .controller('WebechoController', ['echoRest', function (echoRest) {
+    .controller('RestController', ['echoRest', function (echoRest) {
         var that = this;
 
         that.rest = function () {
