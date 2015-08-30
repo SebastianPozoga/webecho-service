@@ -22,8 +22,8 @@
     Id: <input ng-model="ctrl.id"/> <br/>
     Msg: <input ng-model="ctrl.msg"/> <br/>
     Event name: <input ng-model="ctrl.action" value="message"/> <br/>
-    <input type="submit" ng-click="ctrl.echoWithId()" value="emit message"/>
-    <input type="submit" ng-click="ctrl.echoWithoutId()" value="emit debug_event"/>
+    <input type="submit" ng-click="ctrl.echoWithId()" value="emit with id"/>
+    <input type="submit" ng-click="ctrl.echoWithoutId()" value="emit without id"/>
 </div>
 
 <div ng-show="ctrl.started">
