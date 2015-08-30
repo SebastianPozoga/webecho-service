@@ -84,6 +84,25 @@ angular.module('app', [])
 
         that.clear();
     }])
+    .controller('WebechoController', ['echoRest', function (echoRest) {
+        var that = this;
+
+        that.rest = function () {
+            that.form = {
+                action: 'message',
+                data: {
+                    msg: "example message"
+                }
+            };
+        };
+
+        that.send = function () {
+            echoRest.postEcho(that.form);
+            that.rest();
+        };
+
+        that.rest();
+    }])
     .service('io', [function () {
         var api = {};
 
@@ -107,6 +126,15 @@ angular.module('app', [])
             };
 
             return socket;
+        };
+
+        return api;
+    }])
+    .service('echoRest', ['$http', function ($http) {
+        var api = {};
+
+        api.postEcho = function (postObject) {
+            return $http.post("/rest/echo", postObject);
         };
 
         return api;

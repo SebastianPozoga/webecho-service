@@ -24,8 +24,8 @@ module.exports = function (config, logger, app, io) {
     api.tokenHasRole = function (token, role) {
         var row = api.getTokenRow(token);
         if (!row) return false;
-        for (var i in row.role) {
-            if (row.role[i] == role) return true;
+        for (var i in row.roles) {
+            if (row.roles[i] == role) return true;
         }
         return false;
     };

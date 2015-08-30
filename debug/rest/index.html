@@ -1,15 +1,21 @@
 <html>
 <head>
-    <title>Log webecho</title>
+    <title>Rest echo</title>
+    <link href="/main.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-<h1>Webecho - rest - form</h1>
+<body ng-app="app" ng-controller="WebechoController as ctrl">
+<h1>Send rest echo</h1>
 
-<form method="post">
-    <input name="token" value="" placeholder="token"/> <br/>
-    <input name="action" value="change" placeholder="action"/> <br/>
-    <input name="data[msg]" value="example msg" placeholder="example msg"/> <br/>
-    <input type="submit"/> <br/>
+<form name="restForm">
+    <input ng-model="ctrl.form.token" placeholder="token" required/> <br/>
+    <input ng-model="ctrl.form.action" placeholder="action" required/> <br/>
+    <input ng-model="ctrl.form.data.msg" placeholder="example msg" required/> <br/>
+    <input type="submit" ng-disabled="restForm.$invalid" ng-click="ctrl.send()"/> <br/>
 </form>
+
+
+<script src="/lib/socket.io-client/socket.io.js"></script>
+<script src="/lib/angular/angular.min.js"></script>
+<script src="/app.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ var bodyParser = require("body-parser"),
     echo = require("../lib/echo");
 
 module.exports = function (config, logger, app, io, auth) {
-    app.use(bodyParser.urlencoded({extended: false}));
+    app.use(bodyParser.json())
 
     app.post('/rest/echo', function (req, res) {
         var token = req.body.token;
