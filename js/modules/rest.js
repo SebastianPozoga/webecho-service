@@ -8,8 +8,10 @@ module.exports = function (config, logger, app, io, auth) {
         var token = req.body.token;
         if (!auth.isWriteToken(token)) {
             logger.error("Token " + token + " can not write");
+            res.json({status: 'error'}, 403);
             return;
         }
+        res.json({status:'ok'});
         echo.emit("read", req.body.action, req.body.data);
     });
 
