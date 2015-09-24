@@ -13,7 +13,7 @@ cp -r ./* /opt/services/webecho
 rm /otp/services/webecho/bin/install.sh
 
 #add to autostart
-cp bin/gpio.sh /etc/init.d/webecho
+cp bin/webecho.sh /etc/init.d/webecho
 chmod +x /etc/init.d/webecho
 update-rc.d webecho defaults
 
