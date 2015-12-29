@@ -134,7 +134,7 @@ angular.module('app', [])
         var api = {};
 
         api.postEcho = function (postObject) {
-            return $http.post("/rest/echo", postObject);
+            return $http.post("/rest/emit", postObject);
         };
 
         return api;

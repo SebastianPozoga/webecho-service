@@ -2,8 +2,9 @@
 
 It make possible:
  - realtime communication webbrowser and servers scripts (like php, node etc)
- - filter data by actions & ids
- - make read / write role connections
+ - provide security based on tokens and roles (for all actions)
+ - provide dynamic filters for socket (to observable only select collections and ids with those)
+ - provide socket api and rest api
 
 # Install
 ```
@@ -32,34 +33,35 @@ sudo service webecho start/stop/debug/restart
   "tokens": [
     {
       "token": "7574DI3HzLX2EekxgZ2my3fLb77690z4",
-      "roles": [
-        "write",
-        "read"
-      ]
+      "roles": {
+        "echo": "w"
+      }
+    },
+    {
+      "token": "2D427CC2B8FD379A8E99DA3F9CF1F",
+      "roles": {
+        "echo": "a"
+      }
     },
     {
       "token": "*",
-      "roles": [
-        "read"
-      ]
-    },
-    {
-      "token": "user_with_filters",
-      "roles": [
-        "read"
-      ],
-      "filters": {
-        "ids": [],
-        "actions": []
+      "roles": {
+        "echo": "r"
       }
     }
   ]
 }
 ```
+##Descriptions:
  - port - echoservice port
  - tokens - list of tokens use to auth
  - token -  a secret string use to auth and get connect roles
- - roles - connection roles (read - can listen, write - can emit)
+ - roles - token roles map [action_name => role]
+
+##Roles:
+ - r (read) - can listen,
+ - w (write) - can emit
+ - a (all) - can read and write
 
 # Tokens
 Don't use special chars. You can generate token by http://randomkeygen.com (Recomended: CodeIgniter Encryption Keys)
@@ -83,7 +85,7 @@ socket = io({
 if you have write role you can:
 ```
 socket.emit('echo', {
-  action: "emit_action_name",
+  action: "my_action",
   data: {
     desc: "action data"
   }

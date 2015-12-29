@@ -7,4 +7,7 @@ install:
 	bash -x bin/install.sh
 
 start:
-	node webecho.js --debug
+	node webecho.js --webdebug
+
+tests:
+	mocha test -R spec --recursive

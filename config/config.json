@@ -3,16 +3,21 @@
   "tokens": [
     {
       "token": "7574DI3HzLX2EekxgZ2my3fLb77690z4",
-      "roles": [
-        "write",
-        "read"
-      ]
+      "roles": {
+        "echo": "w"
+      }
+    },
+    {
+      "token": "2D427CC2B8FD379A8E99DA3F9CF1F",
+      "roles": {
+        "echo": "a"
+      }
     },
     {
       "token": "*",
-      "roles": [
-        "read"
-      ]
+      "roles": {
+        "echo": "r"
+      }
     }
   ]
 }

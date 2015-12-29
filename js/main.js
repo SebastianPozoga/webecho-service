@@ -1,18 +1,45 @@
-module.exports = function (config) {
-    var app = require('express')(),
-        server = require('http').Server(app),
-        io = require('socket.io')(server),
+'use strict';
 
-        logger = require("./modules/logger"),
-        auth = require("./modules/auth")(config, logger, app, io),
-        socket = require("./modules/socket")(config, logger, app, io, auth),
-        rest = require("./modules/rest")(config, logger, app, io, auth),
-        webDebug;
+var app = require('express')(),
+  server = require('http').Server(app),
+  io = require('socket.io')(server),
 
-    if (config.webdebug == true) {
-        webDebug = require("./modules/webdebug")(config, logger, app, io);
+  ConfigHelper = require("./lib/ConfigHelper"),
+  EchoHelper = require("./lib/EchoHelper"),
+  logger = require("./lib/Logger").logger,
+
+  SocketModule = require("./modules/SocketModule"),
+  RestModule = require("./modules/RestModule"),
+  WebdebugModule = require("./modules/WebdebugModule");
+
+module.exports = class MainApp {
+
+  constructor(config) {
+    this.config = config;
+
+    //default dependencies
+    this.configHelper = new ConfigHelper(this.config, this.logger);
+    this.echoHelper = new EchoHelper();
+    this.server = server;
+    this.app = app;
+    this.io = io;
+    this.logger = logger;
+  }
+
+  start() {
+    if (this.config.webdebug === true) {
+      this.webdebugModule = new WebdebugModule(this.app);
+      this.webdebugModule.init();
     }
 
-    server.listen(config.port);
-    logger.log("echo server started", [config]);
+    this.restModule = new RestModule(this.configHelper, this.echoHelper, this.app);
+    this.restModule.init();
+
+    this.socketModule = new SocketModule(this.configHelper, this.echoHelper, this.io);
+    this.socketModule.init();
+
+    this.server.listen(this.config.port);
+    this.logger.log("echo server started", [this.config]);
+  }
+
 };
