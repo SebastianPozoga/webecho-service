@@ -56,7 +56,7 @@ describe('lib/RestModule', function() {
       test.assert(false === echoHelperMock.$$emited);
     });
 
-    it('return false when token has write permissions to action only', function() {
+    it('return false when token has read permissions to action only', function() {
       var configHelper = new ConfigHelper({
           tokens: [{
             token: 'tokenId',
